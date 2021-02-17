@@ -35,3 +35,10 @@ def send_data_to_screen(text):
     """
     print("The following has been sent to the screen:", text);
 
+
+def play_sound(sound_file):
+    """
+    Plays the sound file
+    """
+    print("Now playing:", sound_file);
+
