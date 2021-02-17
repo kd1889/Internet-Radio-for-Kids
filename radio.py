@@ -29,3 +29,9 @@ def toggle_display(state):
     else:
         print("Screen is Off")
 
+def send_data_to_screen(text):
+    """
+    Sends text to the LCD Screen
+    """
+    print("The following has been sent to the screen:", text);
+
