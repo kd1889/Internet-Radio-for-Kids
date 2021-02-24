@@ -1,7 +1,0 @@
-README.md
-radio.py
-setup.py
-radio.egg-info/PKG-INFO
-radio.egg-info/SOURCES.txt
-radio.egg-info/dependency_links.txt
-radio.egg-info/top_level.txt
