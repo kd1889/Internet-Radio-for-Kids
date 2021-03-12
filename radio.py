@@ -38,8 +38,8 @@ def is_led_on(led_pin):
     returns True if led at pin number led_pin is on 
     else returns false
     """
-
-    return True
+    GPIO.setup(led_pin, GPIO.OUT)
+    return bool(GPIO.input(led_pin))
 
 def is_button_pressed(pin):
     """
