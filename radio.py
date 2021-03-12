@@ -46,8 +46,8 @@ def is_button_pressed(pin):
     returns True if button at pin number pin is on
     else returns false
     """
-
-    return True
+    GPIO.setup(pin, GPIO.IN)
+    return bool(GPIO.input(pin))
 
 
 def char_to_arr(c):

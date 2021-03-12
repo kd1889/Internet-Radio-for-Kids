@@ -6,7 +6,7 @@ print("Testing is_led_on");
 print(radio.is_led_on(0));
 
 print("Testing is_button_pressed");
-print(radio.is_button_pressed(0));
+print(radio.is_button_pressed(4));
 
 print("Testing send_data_to_screen")
 radio.setup_LCD();
