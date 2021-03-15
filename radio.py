@@ -42,13 +42,11 @@ def char_to_arr(c):
 
 def write_arr_4bits(bits, mode, debug=True):
     pins = [LCD_MAP["LCD_D7"], LCD_MAP["LCD_D6"], LCD_MAP["LCD_D5"], LCD_MAP["LCD_D4"]];
-    GPIO.setup(LCD_MAP["LCD_RS"], GPIO.OUT);
     GPIO.output(LCD_MAP["LCD_RS"], mode);
 
     for p, b in zip(pins, bits[:4]):
-       GPIO.setup(p, GPIO.OUT);
        GPIO.output(p,b);
-    
+
     time.sleep(TIMING["E_DELAY"]);
     GPIO.output(LCD_MAP["LCD_E"], GPIO.HIGH);
     time.sleep(TIMING["E_PULSE"]);
@@ -56,9 +54,8 @@ def write_arr_4bits(bits, mode, debug=True):
     time.sleep(TIMING["E_DELAY"]);
 
     for p, b in zip(pins, bits[4:]):
-        GPIO.setup(p, GPIO.OUT);
         GPIO.output(p, b);
-    
+
     time.sleep(TIMING["E_DELAY"]);
     GPIO.output(LCD_MAP["LCD_E"], GPIO.HIGH);
     time.sleep(TIMING["E_PULSE"]);
@@ -67,6 +64,8 @@ def write_arr_4bits(bits, mode, debug=True):
 
     for p in pins:
         GPIO.output(p, GPIO.LOW);
+
+
 def toggle_display(state):
     if (state == 0):
         write_arr_4bits(LCD_COMMAND["LCD_D_OFF"], LCD_CMD);
@@ -76,17 +75,10 @@ def toggle_display(state):
         state_str = "ON";
     print("LCD has been toggled " + state_str);
 
-def setup_LCD():
-    LCD_PINS = [
-                 LCD_MAP["LCD_RS"],
-                 LCD_MAP["LCD_E"],
-                 LCD_MAP["LCD_D7"],
-                 LCD_MAP["LCD_D6"],
-                 LCD_MAP["LCD_D5"],
-                 LCD_MAP["LCD_D4"],
-    ]
 
-    for p in LCD_PINS:
+def setup_LCD():
+
+    for p in LCD_MAP.values():
         GPIO.setup(p, GPIO.OUT);
 
     write_arr_4bits(LCD_COMMAND["LCD_4BIT1"], LCD_CMD);
@@ -94,7 +86,8 @@ def setup_LCD():
     write_arr_4bits(LCD_COMMAND["LCD_ON_NC"], LCD_CMD);
     write_arr_4bits(LCD_COMMAND["LCD_ENTRY"], LCD_CMD);
     write_arr_4bits(LCD_COMMAND["LCD_CLEAR"], LCD_CMD);
-   
+
+
 def send_data_to_screen(text):
     """
     Sends text to the LCD Screen
