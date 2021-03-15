@@ -2,7 +2,7 @@
 LCD_MAP = {
     "LCD_RS": 5,
     "LCD_E": 13,
-    "LCD_RW": 6,
+#    "LCD_RW": 6,  # LCD_RW line is not used and permanently grounded in hardware
     "LCD_D4": 23,
     "LCD_D5": 22,
     "LCD_D6": 27,

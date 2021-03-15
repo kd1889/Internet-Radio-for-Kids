@@ -79,7 +79,6 @@ def toggle_display(state):
 def setup_LCD():
     LCD_PINS = [
                  LCD_MAP["LCD_RS"],
-                 LCD_MAP["LCD_RW"],
                  LCD_MAP["LCD_E"],
                  LCD_MAP["LCD_D7"],
                  LCD_MAP["LCD_D6"],
@@ -89,7 +88,6 @@ def setup_LCD():
 
     for p in LCD_PINS:
         GPIO.setup(p, GPIO.OUT);
-    GPIO.output(LCD_MAP["LCD_RW"], GPIO.LOW);
 
     write_arr_4bits(LCD_COMMAND["LCD_4BIT1"], LCD_CMD);
     write_arr_4bits(LCD_COMMAND["LCD_4BIT2"], LCD_CMD);
