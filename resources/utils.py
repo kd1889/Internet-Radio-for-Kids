@@ -24,3 +24,12 @@ TIMING = {
     "E_PULSE": 0.0005,
     "E_DELAY": 0.0005,
 }
+
+# GPIO TO BUTTON MAPPING
+BUTTON = {
+    "UP": 12,
+    "DOWN": 16,
+    "LEFT": 20,
+    "RIGHT": 7,
+    "SELECT": 8,
+}

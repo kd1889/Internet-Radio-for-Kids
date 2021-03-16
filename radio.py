@@ -5,6 +5,7 @@ from resources.utils import (
     LCD_MAP,
     LCD_COMMAND,
     TIMING,
+    BUTTON,
 )
 
 GPIO.setwarnings(False);
@@ -22,10 +23,10 @@ def info():
 
 def is_led_on(led_pin):
     """
-    returns True if led at pin number led_pin is on 
+    returns True if led at pin number led_pin is on
     else returns false
     """
-    GPIO.setup(led_pin, GPIO.OUT)
+    GPIO.setup(led_pin, GPIO.OUT) # remove once led pins have been assigned
     return bool(GPIO.input(led_pin))
 
 def is_button_pressed(pin):
@@ -33,7 +34,6 @@ def is_button_pressed(pin):
     returns True if button at pin number pin is on
     else returns false
     """
-    GPIO.setup(pin, GPIO.IN)
     return bool(GPIO.input(pin))
 
 
@@ -103,3 +103,17 @@ def play_sound(sound_file):
     """
     print("Now playing:", sound_file);
 
+
+def setup_buttons():
+
+    for b in BUTTON.values():
+        GPIO.setup(b, GPIO.IN)
+
+
+def setup_pins():
+    """
+    Setup all pins required for radio operation. This function
+    must be called before any operation on any GPIO pins
+    """
+    setup_buttons()
+    setup_LCD()
