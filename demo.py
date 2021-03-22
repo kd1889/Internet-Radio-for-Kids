@@ -24,5 +24,6 @@ radio.toggle_display(1);
 time.sleep(0);
 
 print("Testing play_sound");
-radio.play_sound("'Hello' by Lionel Richie")
-
+radio.setup_pygame_player();
+radio.play_sound("HiTomSamp.mp3")
+radio.play_sound("bensound-epic.mp3");

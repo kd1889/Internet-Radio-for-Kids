@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 import sys
+import pygame as pg
 from resources.utils import (
     LCD_MAP,
     LCD_COMMAND,
@@ -96,13 +97,24 @@ def send_data_to_screen(text):
         write_arr_4bits(char_to_arr(char), LCD_CHR);
     print("The following has been sent to the screen:", text);
 
+def setup_pygame_player(freq=44100, bitsize=-16, channels=2, buffer=2048):
+    pg.mixer.init(freq, bitsize, channels, buffer);
 
 def play_sound(sound_file):
     """
-    Plays the sound file
+    Obtained from adafruit I2S decoder setup
     """
+    clock = pg.time.Clock();
+    try:
+        pg.mixer.music.load(sound_file)
+        print("Music file {} loaded!".format(sound_file))
+    except:
+        print("File {} not found! {}".format(music_file, pg.get_error()));
+        return
+    pg.mixer.music.play()
     print("Now playing:", sound_file);
-
+    while pg.mixer.music.get_busy():
+        clock.tick(30);
 
 def setup_buttons():
 
