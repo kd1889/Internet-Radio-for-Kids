@@ -1,0 +1,4 @@
+http://streamer2.legatocommunications.com/kidjam1
+https://ample.revma.ihrhls.com/zc6551/56_68b3wiodtgye02/playlist.m3u8?gender=null&companionAds=true&dist=iheart&init_id=8169&aw_0_1st.playerid=iHeartRadioWebPlayer&uid=90d2ad10-d726-418e-9969-92807ab1c12a&clientType=web&profileid=1515277215&host=webapp.US&zip=11423&callLetters=KIDSCLUB-FL&streamid=6551&pname=OrganicWeb&aw_0_1st.ccaud=&fb_broadcast=0&terminalid=159&listenerId=1acd36290d651949a335bef26428d530&at=0&birthYear=null&modTime=1618353188053&aw_0_1st.skey=1618353188&us_privacy=1-N-&devicename=web-desktop&playedFrom=60&age=null&territory=US&stationid=6551
+http://198.100.149.27:8012/;
+

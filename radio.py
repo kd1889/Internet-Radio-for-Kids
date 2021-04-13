@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import os
 import sys
 import pygame as pg
 from resources.utils import (
@@ -99,6 +100,30 @@ def send_data_to_screen(text):
 
 def setup_pygame_player(freq=44100, bitsize=-16, channels=2, buffer=2048):
     pg.mixer.init(freq, bitsize, channels, buffer);
+
+def play_radio():
+    """
+    From a created playlist of radio stations, play the first station
+    """
+    os.system("mpc play");
+def shutdown_radio():
+    """
+    Stop radio play, and reset playlist
+    """
+    os.system("mpc stop");
+    os.system("mpc clear");
+def setup_station(filename):
+    """
+    Given a filename, read from it different radio stations and fill the
+    MPC playlist with the different stations
+    """
+    stations = open(filename, 'r');
+    for line in stations:
+        if (line.strip()):
+            os.system("mpc add " + line);
+        
+    
+    stations.close();
 
 def play_sound(sound_file):
     """
