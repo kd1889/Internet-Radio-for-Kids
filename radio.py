@@ -119,7 +119,7 @@ def play_sound(sound_file):
 def setup_buttons():
 
     for b in BUTTON.values():
-        GPIO.setup(b, GPIO.IN)
+        GPIO.setup(b, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 
 def setup_pins():
