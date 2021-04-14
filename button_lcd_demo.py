@@ -14,33 +14,19 @@ class Page:
         self.index = 0
         self.features = features
 
-    def scroll(self, inc):
-        self.index += inc
-        if self.index == len(self.features):
-            self.index = 0
+    def display_features(self):
 
-        if self.index < 0:
-            self.index = len(self.features) - 1
+        radio.write_arr_4bits(LCD_COMMAND["LCD_CLEAR"], LCD_CMD)
+        for i in range(len(self.features)):
+            radio.lcd_go_to_XY(i, 0)
+            radio.send_data_to_screen(str(i + 1) + " " + self.features[i])
 
-        return self.features[self.index]
+class Radio(Page):
+    FEATURES = ["Something Else", "Change User", "Back"]
 
-    def down(self):
-        return self.scroll(1)
+    def __init__(self):
 
-    def up(self):
-        return self.scroll(-1)
-
-    def input(self, pin):
-
-        output = None
-
-        if pin == BUTTON[1]:
-            output = self.up()
-        if pin == BUTTON[2]:
-            output = self.down()
-
-        return output
-
+        super().__init__(self.FEATURES)
 
 class HomePage(Page):
     FEATURES = ["Radio", "Downloaded Content", "Settings"]
@@ -48,9 +34,35 @@ class HomePage(Page):
     def __init__(self):
 
         super().__init__(self.FEATURES)
+        self.display_features()
 
+class Book:
+    """Book holds the pages displayed and controls current page"""
 
-curr = HomePage()
+    def __init__(self):
+
+        self.radio = Radio()
+        self.home = HomePage()
+        self.pageIdentifier = {
+                               "hp": {1: (self.radio, "radio")}, # button 1 -> radio
+                               "radio": {3: (self.home, "hp")}
+        }
+
+        self.currPageName = "hp"
+
+    def input(self, pin):
+
+        output = None
+        if pin == BUTTON[1]:
+            if 1 in self.pageIdentifier[self.currPageName]:
+                currPage, self.currPageName = self.pageIdentifier[self.currPageName][1]
+                currPage.display_features()
+        if pin == BUTTON[3]:
+            if 3 in self.pageIdentifier[self.currPageName]:
+                currPage, self.currPageName = self.pageIdentifier[self.currPageName][3]
+                currPage.display_features()
+
+curr = Book()
 
 
 def signal_handler(sig, frame):
@@ -60,15 +72,12 @@ def signal_handler(sig, frame):
 def button_pressed_callback(channel):
 
     output = curr.input(channel)
-
-    if output is not None:
-
-        radio.write_arr_4bits(LCD_COMMAND["LCD_CLEAR"], LCD_CMD)
-        radio.send_data_to_screen(output)
+    return
 
 GPIO.add_event_detect(BUTTON[1], GPIO.FALLING, 
             callback=button_pressed_callback, bouncetime=100)
-
+GPIO.add_event_detect(BUTTON[3], GPIO.FALLING,
+            callback=button_pressed_callback, bouncetime=100)
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.pause()
