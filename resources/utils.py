@@ -27,9 +27,9 @@ TIMING = {
 
 # GPIO TO BUTTON MAPPING
 BUTTON = {
-    "UP": 12,
-    "DOWN": 16,
-    "LEFT": 20,
-    "RIGHT": 7,
-    "SELECT": 8,
+    1: 12,
+    2: 16,
+    3: 20,
+    4: 7,
+    5: 8,
 }

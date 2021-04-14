@@ -34,9 +34,9 @@ class Page:
 
         output = None
 
-        if pin == BUTTON["UP"]:
+        if pin == BUTTON[1]:
             output = self.up()
-        if pin == BUTTON["DOWN"]:
+        if pin == BUTTON[2]:
             output = self.down()
 
         return output
@@ -66,7 +66,7 @@ def button_pressed_callback(channel):
         radio.write_arr_4bits(LCD_COMMAND["LCD_CLEAR"], LCD_CMD)
         radio.send_data_to_screen(output)
 
-GPIO.add_event_detect(BUTTON["UP"], GPIO.FALLING, 
+GPIO.add_event_detect(BUTTON[1], GPIO.FALLING, 
             callback=button_pressed_callback, bouncetime=100)
 
 

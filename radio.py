@@ -98,6 +98,33 @@ def send_data_to_screen(text):
         write_arr_4bits(char_to_arr(char), LCD_CHR);
     print("The following has been sent to the screen:", text);
 
+def lcd_go_to_XY(x, y):
+    
+    if not 0 <= x < 4 and 0 <= y < 20:
+        raise Exception("x and y must be integers with  0 <= x <= 4 and 0 <= y <= 20")
+    
+    addr = 0
+    
+    if x == 0:
+        addr = 0x00
+    
+    if x == 1:
+        addr = 0x40
+    
+    if x == 2:
+        addr = 0x14
+    
+    if x == 3:
+        addr = 0x54
+    
+    addr += y
+    
+    addr = 0x80 | addr # extend to 8 bits
+    
+    cmd = [int(x) for x in list(bin(addr))[2:]]
+    
+    write_arr_4bits(cmd, 0) # move cursor to position x, y on screen
+
 def setup_pygame_player(freq=44100, bitsize=-16, channels=2, buffer=2048):
     pg.mixer.init(freq, bitsize, channels, buffer);
 
