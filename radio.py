@@ -128,17 +128,16 @@ def lcd_go_to_XY(x, y):
 def setup_pygame_player(freq=44100, bitsize=-16, channels=2, buffer=2048):
     pg.mixer.init(freq, bitsize, channels, buffer);
 
-def play_radio():
+def play_radio(station_num = 1):
     """
     From a created playlist of radio stations, play the first station
     """
-    os.system("mpc play");
-def shutdown_radio():
+    os.system("mpc play " + str(station_num));
+def stop_radio():
     """
     Stop radio play, and reset playlist
     """
     os.system("mpc stop");
-    os.system("mpc clear");
 def setup_station(filename):
     """
     Given a filename, read from it different radio stations and fill the
@@ -165,9 +164,10 @@ def play_sound(sound_file):
         return
     pg.mixer.music.play()
     print("Now playing:", sound_file);
-    while pg.mixer.music.get_busy():
-        clock.tick(30);
-
+    #while pg.mixer.music.get_busy():
+    #    clock.tick(30);
+def stop_player():
+    pg.mixer.music.stop();
 def setup_buttons():
 
     for b in BUTTON.values():

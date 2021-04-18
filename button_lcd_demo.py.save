@@ -10,20 +10,20 @@ GPIO.setmode(GPIO.BCM)
 LCD_CMD = GPIO.LOW
 radio.setup_pins()
 exit_event = threading.Event() # exit_event for background musicPlayer
-radio.setup_pygame_player();
+
 class MusicPlayer(threading.Thread):
 
     def __init__(self):
         super().__init__()
-        self.trackList = ["bensound-epic.mp3"]
+        self.trackList = ["Jack", "Join", "Monroe", "Emily"]
         self.index = 0 # for track number in trackList
         self.isPlaying = False # attribute is set to true when track is playing
-        self.changeTrack = True # set to true when changing track
+        self.changeTrack = False # set to true when changing track
 
-       # threading to keep play running at all times in background
-        thread = threading.Thread(target=self.play, args=())
-        thread.daemon = True
-        thread.start()
+        # threading to keep play running at all times in background
+        #thread = threading.Thread(target=self.play, args=())
+        #thread.daemon = True
+        #thread.start()
 
 
     def play(self):
@@ -42,27 +42,10 @@ class MusicPlayer(threading.Thread):
         play track should be updated with actual code for playing station or
         track
         """
-        self.isPlaying = True;
-#        for i in range(len(self.trackList)):
-#            if not self.isPlaying:
-#                break
-#            print("Playing track: " + self.trackList[trackNumber])
-#            time.sleep(1)
-        radio.play_sound(self.trackList[trackNumber % len(self.trackList)]);
-#        self.isPlaying=False;
-#        self.isPlaying = True
 
-#        for i in range(5):
-#            if not self.isPlaying:
-#                break
-#            print("playing track: " + self.trackList[trackNumber])
-#            time.sleep(1)
-
-#        self.isPlaying = False # done playing music
+        
 
     def kill_music(self):
-        radio.stop_player();
-        radio.stop_radio();
         self.isPlaying = False
 
     def play_next_track(self, trackNumber):
@@ -110,13 +93,11 @@ class PlaySomething(Page):
         super().__init__(self.FEATURES)
         self.radio_number = 0 # radio number on screen - 1
         self.playlist_number = 0 # playlist number on screen - 1
-        self.number_of_playlists = 1
-        self.number_of_stations = 3
+        self.number_of_playlists = 4
+        self.number_of_stations = 4
 
         self.musicPlayer = MusicPlayer()
-        #radio.stop_player();
-        #radio.play_radio(1);
-       # self.play_track()
+        self.play_track()
 
     @staticmethod
     def increment_index(inc, maxIndex):
@@ -147,18 +128,8 @@ class PlaySomething(Page):
         self.display_features()
 
     def exit_actions(self, actionNumber=0):
-        if actionNumber == 1: #playing radio
-            radio.stop_radio();
-            radio.stop_player();
-            radio.play_radio(self.radio_number + 1);
-            
-            
         if actionNumber == 2: # playing playlist
-            radio.stop_radio();
-            radio.stop_player();
-            self.play_track(self.playlist_number + 1);
-            
-            
+            self.play_track(self.playlist_number)
 
     def play_track(self, trackNumber=0):
 
@@ -226,13 +197,11 @@ class Book:
             self.currPage.exit_actions(buttonNumber)
             self.currPage, self.currPageName = output
             self.currPage.perform_actions(buttonNumber)
-            print("Output is not None");
+
 curr = Book()
 
 
 def signal_handler(sig, frame):
-    radio.stop_player();
-    radio.stop_radio();
     exit_event.set()
     GPIO.cleanup()
     sys.exit(0)

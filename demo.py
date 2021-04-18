@@ -25,10 +25,10 @@ time.sleep(1);
 
 print("Testing play_sound");
 radio.setup_pygame_player();
-#radio.play_sound("HiTomSamp.mp3")
-#radio.play_sound("bensound-epic.mp3");
-
-#time.sleep(1);
-radio.play_radio();
+radio.play_sound("HiTomSamp.mp3")
+radio.play_sound("bensound-epic.mp3");
+radio.send_data_to_screen("Now playing 'Epic'");
+time.sleep(1);
+#radio.play_radio();
 time.sleep(15);
 radio.shutdown_radio();
