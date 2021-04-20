@@ -48,7 +48,7 @@ class MusicPlayer(threading.Thread):
 #                break
 #            print("Playing track: " + self.trackList[trackNumber])
 #            time.sleep(1)
-        radio.play_sound(self.trackList[trackNumber % len(self.trackList)]);
+        radio.play_sound(self.trackList[trackNumber]);
 #        self.isPlaying=False;
 #        self.isPlaying = True
 
@@ -150,13 +150,13 @@ class PlaySomething(Page):
         if actionNumber == 1: #playing radio
             radio.stop_radio();
             radio.stop_player();
-            radio.play_radio(self.radio_number + 1);
+            radio.play_radio(self.radio_number);
             
             
         if actionNumber == 2: # playing playlist
             radio.stop_radio();
             radio.stop_player();
-            self.play_track(self.playlist_number + 1);
+            self.play_track(self.playlist_number);
             
             
 
