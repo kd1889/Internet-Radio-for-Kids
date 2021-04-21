@@ -168,6 +168,8 @@ def play_sound(sound_file):
     #    clock.tick(30);
 def stop_player():
     pg.mixer.music.stop();
+def check_player():
+    return pg.mixer.music.get_busy();
 def setup_buttons():
 
     for b in BUTTON.values():
