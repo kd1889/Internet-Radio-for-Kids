@@ -25,12 +25,23 @@ class MusicPlayer(threading.Thread):
         thread.daemon = True
         thread.start()
 
+    def pause(self):
+        radio.pause_music()
+        self.isPlaying = False
+
+    def unpause(self):
+        radio.unpause_music()
+        self.isPlaying = True
 
     def play(self):
 
         while True:
             if exit_event.is_set():
                 break # kill background task play at the end when ctrl + c hit
+
+            if not radio.is_music_playing():
+                self.isPlaying = False
+
             if self.changeTrack:
 
                 self.play_track(self.index)
@@ -157,8 +168,15 @@ class PlaySomething(Page):
             radio.stop_radio();
             radio.stop_player();
             self.play_track(self.playlist_number);
-            
-            
+
+    def is_playing(self):
+        return self.musicPlayer.isPlaying
+
+    def pause(self):
+        self.musicPlayer.pause()
+
+    def unpause(self):
+        self.musicPlayer.unpause()
 
     def play_track(self, trackNumber=0):
 
@@ -179,6 +197,7 @@ class Book:
         self.playSomething = PlaySomething()
         self.home = HomePage()
         self.home.perform_actions()
+        self.isPausedOrMuted = False
         self.pageIdentifier = {
                                "hp": {
                                       1: (self.playSomething, "playSomething") # button 1 -> radio
@@ -217,6 +236,23 @@ class Book:
                 output = self.pageIdentifier[self.currPageName][4]
                 buttonNumber = 4
 
+            else: # mute or pause actions
+                if self.isPausedOrMuted is not None:
+                    if not self.isPausedOrMuted:
+                        # if radio is playing
+                            # mute radio
+                        if self.playSomething.is_playing():
+                            self.playSomething.pause()
+                            print("Music paused")
+                        self.isPausedOrMuted = True
+                    else:
+                        # if radio is muted
+                            # unmute radio
+                        if not self.playSomething.is_playing():
+                            self.playSomething.unpause()
+                            print("Music unpaused")
+                        self.isPausedOrMuted = False
+
         if pin == BUTTON[5]:
             if 5 in self.pageIdentifier[self.currPageName]:
                 output = self.pageIdentifier[self.currPageName][5]
@@ -245,7 +281,7 @@ def button_pressed_callback(channel):
 GPIO.add_event_detect(BUTTON[1], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[2], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[3], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
-#GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
+GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 #GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 
 signal.signal(signal.SIGINT, signal_handler)
