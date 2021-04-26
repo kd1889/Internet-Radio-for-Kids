@@ -5,17 +5,19 @@ import RPi.GPIO as GPIO
 from resources.utils import BUTTON, LCD_COMMAND
 import time
 import threading
-
+#import pygame as pg
 GPIO.setmode(GPIO.BCM)
 LCD_CMD = GPIO.LOW
 radio.setup_pins()
 exit_event = threading.Event() # exit_event for background musicPlayer
 radio.setup_pygame_player();
+#MUSIC_ENDED = pg.USEREVENT;
+#pg.mixer.music.set_endevent(MUSIC_ENDED);
 class MusicPlayer(threading.Thread):
 
     def __init__(self):
         super().__init__()
-        self.trackList = ["bensound-epic.mp3"]
+        self.trackList = ["HiTomSamp.mp3","bensound-epic.mp3", "bensound-onceagain.mp3"]
         self.index = 0 # for track number in trackList
         self.isPlaying = False # attribute is set to true when track is playing
         self.changeTrack = True # set to true when changing track
@@ -43,9 +45,11 @@ class MusicPlayer(threading.Thread):
                 self.isPlaying = False
 
             if self.changeTrack:
-
-                self.play_track(self.index)
-                self.changeTrack = False
+                self.play_track(self.index);
+                self.changeTrack = False;
+            time.sleep(1);
+            if not radio.is_music_playing():
+                self.play_next_track(self.index);
             time.sleep(1)
 
     def play_track(self, trackNumber=0):
@@ -60,6 +64,7 @@ class MusicPlayer(threading.Thread):
 #            print("Playing track: " + self.trackList[trackNumber])
 #            time.sleep(1)
         radio.play_sound(self.trackList[trackNumber]);
+        self.index = (self.index+1)%len(self.trackList) ;
 #        self.isPlaying=False;
 #        self.isPlaying = True
 
@@ -77,11 +82,11 @@ class MusicPlayer(threading.Thread):
         self.isPlaying = False
 
     def play_next_track(self, trackNumber):
-        self.kill_music()
+        #self.kill_music()
         # sleep time here must be greater than that in play to ensure effect
         # of kill_music and change track
-        time.sleep(1.1)
-        self.index = trackNumber
+        #time.sleep(1.1)
+        self.index = trackNumber;
         self.changeTrack = True
 
 class Page:
@@ -162,12 +167,12 @@ class PlaySomething(Page):
             radio.stop_radio();
             radio.stop_player();
             radio.play_radio(self.radio_number);
-            
-            
+
         if actionNumber == 2: # playing playlist
             radio.stop_radio();
             radio.stop_player();
-            self.play_track(self.playlist_number);
+            self.play_track();
+            #self.play();
 
     def is_playing(self):
         return self.musicPlayer.isPlaying
