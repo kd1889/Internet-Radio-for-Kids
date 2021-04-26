@@ -210,7 +210,8 @@ class Book:
                                "playSomething": {
                                                  1: (self.home, "hp"),
                                                  2: (self.home, "hp"),
-                                                 3: (self.playSomething, "playSomething")
+                                                 3: (self.playSomething, "playSomething"),
+                                                 5: (self.home, "hp") # back button
                               }
         }
 
@@ -286,8 +287,8 @@ def button_pressed_callback(channel):
 GPIO.add_event_detect(BUTTON[1], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[2], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[3], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
-GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
-#GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
+GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # mute or pause
+GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # back button
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.pause()
