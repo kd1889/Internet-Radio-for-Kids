@@ -1,0 +1,11 @@
+---
+stations:
+  - name: Kids Jam
+    url: http://streamer2.legatocommunications.com/kidjam1
+    state: False
+  - name: iHeartRadio Kids
+    url: https://ample.revma.ihrhls.com/zc6551/56_68b3wiodtgye02/playlist.m3u8
+    state: False
+  - name: Desi Music
+    url: http://190.100.149.27:8012/;
+    state: False
