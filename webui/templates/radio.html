@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="text-right" lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -10,11 +10,22 @@
 </head>
 
 <body>
+    <nav class="navbar navbar-light navbar-expand-md">
+        <div class="container-fluid"><a class="navbar-brand" href="#">Internet Radio</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="#">Radio Stations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="music.html">Saved Music</a></li>
+                    <li class="nav-item"><a class="nav-link" href="control.html">Parental Controls</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <h1>Hi, User1</h1>
     <div class="container">
         <div class="row">
-            <div class="col-md-4"><a id="Radio" class="btn btn-primary btn-lg btn-block" href="#" role="button">Radio</a><a id="Saved-Music" class="btn btn-primary btn-lg btn-block" href="music.html" role="button">Saved Music</a><a id="Parental-Controls" class="btn btn-primary btn-lg btn-block" href="control.html" role="button">Parental Controls</a></div>
-            <div class="col-md-8"><div class="table-responsive">
+            <div class="col-md-12"><div class="table-responsive">
+    <form method="POST">
     <table class="table">
         <thead>
             <tr>
@@ -23,14 +34,27 @@
             </tr>
         </thead>
         <tbody>
-            {% for station in stations%}
+            {% for station in stations %}
             <tr>
-                <td>{{station.name|safe}}</td>
-                <td>{{station.state|safe}}</td>
+                <td>{{station['name']}}</td>
+                <td>
+                    
+                        
+                            {% if station['state'] %}
+                            <input id="defaultCheck1" class="form-check-input" type="checkbox" name="station" value="{{station['no']}}" checked/>
+                            {% else %}
+                            <input id="formCheck-1" class="form-check-input" type="checkbox" name="station" value="{{station['no']}}" />
+                            {% endif %}
+                        
+                    
+                </td>
+                <td>{{station['state']}}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+        <button class="btn btn-primary pull-right btn-lg" type="submit">Submit</button>
+</form>
 </div></div>
         </div>
     </div>

@@ -15,13 +15,31 @@
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="radio.html">Radio Stations</a></li>
-                    <li class="nav-item"><a class="nav-link" href="music.html">Saved Music</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#">Saved Music</a></li>
                     <li class="nav-item"><a class="nav-link" href="control.html">Parental Controls</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <h1>Hi, User1</h1>
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link active" href="#">Upload Music</a></li>
+        <li class="nav-item"><a class="nav-link" href="playlist-music.html">Playlists</a></li>
+    </ul><div class="row">
+    <div class="col">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Select Music</label>
+            <div class="custom-file">
+                <input type='file' class='custom-file-input' name="music" id="music">
+                <label class="custom-file-label" for="music">Select Music...</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+    </div>
+
+</div>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
