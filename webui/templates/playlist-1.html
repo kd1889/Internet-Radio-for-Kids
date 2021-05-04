@@ -27,9 +27,41 @@
         <li class="nav-item"><a class="nav-link active" href="#">Playlists</a></li>
     </ul>
     <ul class="nav nav-tabs">
-        <li class="nav-item"><a class="nav-link" href="playlist-1.html">Playlist 1</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">Playlist 1</a></li>
         <li class="nav-item"><a class="nav-link" href="playlist-2.html">Playlist 2</a></li>
-    </ul>
+    </ul><div class="table-responsive">
+    <form method="POST">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Music Name</th>
+                <th>Include</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for music in all_music %}
+            <tr>
+                <td>{{music['name']}}</td>
+                <td>
+                    {%if pl1 is none %}
+                    <input id="formCheck-1" class="form-check-input" type="checkbox" name="music" value="{{music['filename']}}" />
+                        
+                            {% elif music['filename'] in pl1 %}
+                            <input id="defaultCheck1" class="form-check-input" type="checkbox" name="music" value="{{music['filename']}}" checked/>
+                            {% else %}
+                            <input id="formCheck-1" class="form-check-input" type="checkbox" name="music" value="{{music['filename']}}" />
+                            {% endif %}
+                        
+                    
+                </td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        <button class="btn btn-primary pull-right btn-lg" type="submit">Submit</button>
+</form>
+</div>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>

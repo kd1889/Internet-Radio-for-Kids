@@ -1,11 +1,10 @@
-num_music: '4'
 musics:
-  -  name: Epic
-     filename: bensound-epic.mp3
-  -  name: Once Again
-     filename: bensound-onceagain.mp3
-  -  name: Short Music
-     filename: HiTomSamp.mp3
-  -  name: Sunny
-     filename: bensound-sunny.mp3
-
+- filename: bensound-epic.mp3
+  name: Epic
+- filename: bensound-onceagain.mp3
+  name: Once Again
+- filename: HiTomSamp.mp3
+  name: Short Music
+- filename: bensound-sunny.mp3
+  name: Sunny
+num_music: '4'

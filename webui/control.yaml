@@ -1,0 +1,17 @@
+drop_down:
+  add_music_radio:
+  - - Enable_Session
+    - false
+  - - Enable_Always
+    - true
+  - - Disable
+    - false
+  pc_status:
+  - - Enable
+    - true
+  - - Disable
+    - false
+textbox:
+  end_time: '4'
+  max_playtime: '6'
+  start_time: '2'

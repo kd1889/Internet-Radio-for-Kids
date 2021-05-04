@@ -28,14 +28,30 @@
     </ul><div class="row">
     <div class="col">
     <form method="POST" enctype="multipart/form-data">
+        
         <div class="form-group">
+            <label for="music_name">Music Name:</label>
+            {% if disabled %}
+  <input type="text" size="50" id="music_name" name="music_name" disabled>
+            {% else %}
+            <input type="text" size="50" id="music_name" name="music_name">
+            {%endif%}
+            <br>
             <label>Select Music</label>
             <div class="custom-file">
-                <input type='file' class='custom-file-input' name="music" id="music">
+                {% if disabled %}
+                <input type='file' class='custom-file-input' name="music" id="music" disabled>
+                {% else %}
+                <input type='file' class='custom-file-input' name="music" id="music" >
+                {% endif %}
                 <label class="custom-file-label" for="music">Select Music...</label>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Upload</button>
+        {% if disabled %}
+        <button type="submit" class="btn btn-primary" disabled>Upload</button>
+        {% else %}
+        <button type="submit" class="btn btn-primary" >Upload</button>
+        {% endif %}
     </form>
     </div>
 

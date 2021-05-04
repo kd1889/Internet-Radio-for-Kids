@@ -23,11 +23,53 @@
     </nav>
     <h1>Hi, User1</h1>
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Control</h1>
-            </div>
-        </div>
+        <div class="row"><div class="col-md-12">
+    
+
+      <h1>Parental Control</h1>
+      <hr>
+      <form action="/control.html" id="pc" method="POST" enctype="multipart/form-data">
+  <label for="pc_status">Parental control status:</label>
+  <select name="pc_status" id="pc_status" form="pc">
+    {% if config["drop_down"]["pc_status"][0][1] %}
+      <option value="Enable" SELECTED>Enable</option>
+      <option value="Disable">Disable</option>
+    {% else %}
+      <option value="Enable">Enable</option>
+      <option value="Disable" SELECTED>Disable</option>
+    {% endif %}
+  </select>
+  <br><br>
+  <label for="max_playtime">Maximum playtime per day hour(s):</label>
+  <input type="text" size="2" id="max_playtime" name="max_playtime" value= {{ config["textbox"]["max_playtime"] }} >
+  <br><br>
+  <label for="start_time">Play Only during these times (in 24hr time):</label>
+  <input type="text" size="2" id="start_time" name="start_time" value= {{ config["textbox"]["start_time"] }} >
+          <label for="end_time">-</label>
+  <input type="text" size="2" id="end_time" name="end_time" value= {{config["textbox"]["end_time"] }}>
+  <br><br>
+  <label for="add_music_radio">Add music/radio stations:</label>
+  <select name="add_music_radio" id="pc_status" form="pc">
+    {% if config["drop_down"]["add_music_radio"][0][1] %}
+      <option value="Enable_Session" SELECTED>Enable for this session</option>
+      <option value="Enable_Always">Enable for always</option>
+      <option value="Disable">Disable</option>
+    {% elif config["drop_down"]["add_music_radio"][1][1] %}
+      <option value="Enable_Session">Enable for this session</option>
+      <option value="Enable_Always" SELECTED>Enable for always</option>
+      <option value="Disable">Disable</option>
+    {% else %}
+      <option value="Enable_Session">Enable for this session</option>
+      <option value="Enable_Always">Enable for always</option>
+      <option value="Disable" SELECTED>Disable</option>
+    {% endif %}
+  </select>
+  <br><br>
+  <button type="submit" class="btn btn-primary">Submit</button>
+
+      </form>
+    </div>
+ </div>
     </div>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>

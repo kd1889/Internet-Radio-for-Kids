@@ -41,9 +41,18 @@
                     
                         
                             {% if station['state'] %}
-                            <input id="defaultCheck1" class="form-check-input" type="checkbox" name="station" value="{{station['no']}}" checked/>
+                            {% if disabled %}
+                            <input id="defaultCheck1" class="form-check-input" type="checkbox" name="station" value="{{station['no']}}" checked disabled/>
+                    {% else %}
+                    <input id="defaultCheck1" class="form-check-input" type="checkbox" name="station" value="{{station['no']}}" checked/>
+                    {% endif %}
                             {% else %}
-                            <input id="formCheck-1" class="form-check-input" type="checkbox" name="station" value="{{station['no']}}" />
+                    {% if disabled %}
+                            <input id="formCheck-1" class="form-check-input" type="checkbox" name="station" value="{{station['no']}}" disabled/>
+                    {% else %}
+                    <input id="formCheck-1" class="form-check-input" type="checkbox" name="station" value="{{station['no']}}"/>
+                    {% endif %}
+                    
                             {% endif %}
                         
                     
@@ -53,7 +62,11 @@
             {% endfor %}
         </tbody>
     </table>
+        {%if disabled%}
+        <button class="btn btn-primary pull-right btn-lg" type="submit" disabled>Submit</button>
+        {% else %}
         <button class="btn btn-primary pull-right btn-lg" type="submit">Submit</button>
+        {% endif %}
 </form>
 </div></div>
         </div>

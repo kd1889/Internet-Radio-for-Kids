@@ -3,6 +3,7 @@ import time
 import os
 import sys
 import pygame as pg
+import yaml;
 from resources.utils import (
     LCD_MAP,
     LCD_COMMAND,
@@ -144,6 +145,7 @@ def setup_station(filename):
     MPC playlist with the different stations
     """
     stations = open(filename, 'r');
+    
     for line in stations:
         if (line.strip()):
             os.system("mpc add " + line);
