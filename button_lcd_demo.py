@@ -20,7 +20,7 @@ class MusicPlayer(threading.Thread):
         self.trackList = ["HiTomSamp.mp3","bensound-epic.mp3", "bensound-onceagain.mp3"]
         self.index = 0 # for track number in trackList
         self.isPlaying = False # attribute is set to true when track is playing
-        self.changeTrack = True # set to true when changing track
+        self.changeTrack = False # set to true when changing track
 
        # threading to keep play running at all times in background
         thread = threading.Thread(target=self.play, args=())
@@ -35,29 +35,31 @@ class MusicPlayer(threading.Thread):
         radio.unpause_music()
         self.isPlaying = True
 
+    def process(self):
+        if self.changeTrack:
+            self.changeTrack = False
+            self.play_track(self.index);
+
+        if not radio.is_music_playing():
+            # if music was playing before but has now ended play next track; else it has been paused
+            if self.isPlaying == True:
+                self.play_next_track(self.index)
+
+        time.sleep(1)
+
     def play(self):
 
         while True:
             if exit_event.is_set():
                 break # kill background task play at the end when ctrl + c hit
-
-            if not radio.is_music_playing():
-                self.isPlaying = False
-
-            if self.changeTrack:
-                self.play_track(self.index);
-                self.changeTrack = False;
-            time.sleep(1);
-            if not radio.is_music_playing():
-                self.play_next_track(self.index);
-            time.sleep(1)
+            self.process()
 
     def play_track(self, trackNumber=0):
         """
         play track should be updated with actual code for playing station or
         track
         """
-        self.isPlaying = True;
+#        self.isPlaying = True;
 #        for i in range(len(self.trackList)):
 #            if not self.isPlaying:
 #                break
@@ -65,6 +67,8 @@ class MusicPlayer(threading.Thread):
 #            time.sleep(1)
         radio.play_sound(self.trackList[trackNumber]);
         self.index = (self.index+1)%len(self.trackList) ;
+        self.isPlaying = True;
+        time.sleep(5)
 #        self.isPlaying=False;
 #        self.isPlaying = True
 
@@ -85,7 +89,7 @@ class MusicPlayer(threading.Thread):
         #self.kill_music()
         # sleep time here must be greater than that in play to ensure effect
         # of kill_music and change track
-        #time.sleep(1.1)
+        # time.sleep(1.1)
         self.index = trackNumber;
         self.changeTrack = True
 
@@ -124,6 +128,8 @@ class PlaySomething(Page):
     def __init__(self):
 
         super().__init__(self.FEATURES)
+        self.isRadioPlaying = False
+        self.isMusicOnly = True
         self.radio_number = 0 # radio number on screen - 1
         self.playlist_number = 0 # playlist number on screen - 1
         self.number_of_playlists = 1
@@ -156,6 +162,18 @@ class PlaySomething(Page):
         self.FEATURES[0] = "Radio " + str(self.radio_number + 1)
         self.FEATURES[1] = "Playlist " + str(self.playlist_number + 1)
 
+    def is_radio_playing(self):
+        return self.isRadioPlaying
+
+    def stop_radio(self):
+        radio.stop_radio()
+        radio.stop_player()
+        self.isRadioPlaying = False
+
+    def play_radio(self):
+        radio.play_radio(self.radio_number)
+        self.isRadioPlaying = True
+
     def perform_actions(self, actionNumber=0):
         if actionNumber == 3:
             self.next_option()
@@ -164,13 +182,13 @@ class PlaySomething(Page):
 
     def exit_actions(self, actionNumber=0):
         if actionNumber == 1: #playing radio
-            radio.stop_radio();
-            radio.stop_player();
+            self.isMusicOnly = False
+            self.stop_radio()
             radio.play_radio(self.radio_number);
 
         if actionNumber == 2: # playing playlist
-            radio.stop_radio();
-            radio.stop_player();
+            self.isMusicOnly = True
+            self.stop_radio()
             self.play_track();
             #self.play();
 
@@ -245,18 +263,31 @@ class Book:
             else: # mute or pause actions
                 if self.isPausedOrMuted is not None:
                     if not self.isPausedOrMuted:
-                        # if radio is playing
-                            # mute radio
-                        if self.playSomething.is_playing():
-                            self.playSomething.pause()
-                            print("Music paused")
+
+                        if not self.playSomething.isMusicOnly: # if currently playing music
+
+                            if self.playSomething.is_radio_playing():
+                                self.playSomething.stop_radio()
+                                print("radio muted")
+
+                        else:
+
+                            if self.playSomething.is_playing():
+                                self.playSomething.pause()
+                                print("Music paused")
                         self.isPausedOrMuted = True
                     else:
-                        # if radio is muted
-                            # unmute radio
-                        if not self.playSomething.is_playing():
-                            self.playSomething.unpause()
-                            print("Music unpaused")
+
+                        if not self.playSomething.isMusicOnly: # if currently radio and not playing music
+
+                            if not self.playSomething.is_radio_playing():
+                                self.playSomething.play_radio()
+                                print("radio unmuted")
+                        else:
+
+                            if not self.playSomething.is_playing():
+                                self.playSomething.unpause()
+                                print("Music unpaused")
                         self.isPausedOrMuted = False
 
         if pin == BUTTON[5]:
