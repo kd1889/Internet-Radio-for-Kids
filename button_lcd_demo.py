@@ -13,10 +13,12 @@ exit_event = threading.Event() # exit_event for background musicPlayer
 radio.setup_pygame_player();
 #MUSIC_ENDED = pg.USEREVENT;
 #pg.mixer.music.set_endevent(MUSIC_ENDED);
+
 class MusicPlayer(threading.Thread):
 
     def __init__(self):
         super().__init__()
+        self.TIME_PLAYED = 0
         self.trackList = ["HiTomSamp.mp3","bensound-epic.mp3", "bensound-onceagain.mp3"]
         self.index = 0 # for track number in trackList
         self.isPlaying = False # attribute is set to true when track is playing
@@ -38,7 +40,7 @@ class MusicPlayer(threading.Thread):
     def process(self):
         if self.changeTrack:
             self.changeTrack = False
-            self.play_track(self.index);
+            self.play_track(self.index)
 
         if not radio.is_music_playing():
             # if music was playing before but has now ended play next track; else it has been paused
@@ -65,7 +67,7 @@ class MusicPlayer(threading.Thread):
 #                break
 #            print("Playing track: " + self.trackList[trackNumber])
 #            time.sleep(1)
-        radio.play_sound(self.trackList[trackNumber]);
+        self.TIME_PLAYED += radio.play_sound(self.trackList[trackNumber]);
         self.index = (self.index+1)%len(self.trackList) ;
         self.isPlaying = True;
         time.sleep(5)
@@ -128,6 +130,7 @@ class PlaySomething(Page):
     def __init__(self):
 
         super().__init__(self.FEATURES)
+        self.isLocked = False # parental lock
         self.isRadioPlaying = False
         self.isMusicOnly = True
         self.radio_number = 0 # radio number on screen - 1
@@ -139,6 +142,9 @@ class PlaySomething(Page):
         #radio.stop_player();
         #radio.play_radio(1);
        # self.play_track()
+
+    def get_time_played(self):
+        return self.musicPlayer.TIME_PLAYED
 
     @staticmethod
     def increment_index(inc, maxIndex):
@@ -181,6 +187,10 @@ class PlaySomething(Page):
         self.display_features()
 
     def exit_actions(self, actionNumber=0):
+        if self.is_locked():
+            print("Cannot play anything if locked")
+            return # do not perform any action below
+
         if actionNumber == 1: #playing radio
             self.isMusicOnly = False
             self.stop_radio()
@@ -194,6 +204,15 @@ class PlaySomething(Page):
 
     def is_playing(self):
         return self.musicPlayer.isPlaying
+
+    def is_locked(self):
+        return self.isLocked
+
+    def lock(self):
+        self.isLocked = True
+
+    def unlock(self):
+        self.isLocked = False
 
     def pause(self):
         self.musicPlayer.pause()
@@ -221,6 +240,7 @@ class Book:
         self.home = HomePage()
         self.home.perform_actions()
         self.isPausedOrMuted = False
+        self.hasReachedMax = False # based on parental control
         self.pageIdentifier = {
                                "hp": {
                                       1: (self.playSomething, "playSomething") # button 1 -> radio
@@ -235,6 +255,32 @@ class Book:
 
         self.currPageName = "hp"
         self.currPage = self.home
+        self.MAX_TIME = 0.5
+
+        # threading to keep checking whether daily max has been reached
+        thread = threading.Thread(target=self.p_control, args=())
+        thread.daemon = True
+        thread.start()
+
+    def p_control(self):
+
+        while True:
+            if exit_event.is_set():
+                break # kill background task play at the end when ctrl + c hit
+
+            if self.playSomething.get_time_played() > self.MAX_TIME:
+
+                if not self.playSomething.is_locked():
+                    if self.playSomething.is_playing():
+                        self.playSomething.pause()
+                        print("Lock has paused music")
+
+                    self.playSomething.stop_radio()
+                    self.playSomething.lock()
+            else:
+                if self.playSomething.is_locked():
+                    self.playSomething.unlock()
+            time.sleep(1)
 
     def input(self, pin):
 
@@ -261,6 +307,9 @@ class Book:
                 buttonNumber = 4
 
             else: # mute or pause actions
+                if self.playSomething.is_locked():
+                    print("Cannot pause/mute if locked")
+                    return
                 if self.isPausedOrMuted is not None:
                     if not self.isPausedOrMuted:
 

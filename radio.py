@@ -1,3 +1,4 @@
+from mutagen.mp3 import MP3
 import RPi.GPIO as GPIO
 import time
 import os
@@ -166,6 +167,9 @@ def play_sound(sound_file):
         return
     pg.mixer.music.play()
     print("Now playing:", sound_file);
+
+    audio = MP3(sound_file)
+    return audio.info.length
     #while pg.mixer.music.get_busy():
     #    clock.tick(30);
 def stop_player():
