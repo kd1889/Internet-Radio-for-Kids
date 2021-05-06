@@ -262,11 +262,11 @@ class HomePage(Page):
 
         super().__init__(self.FEATURES)
 
-class Book:
+class Book(threading.Thread):
     """Book holds the pages displayed and controls current page"""
 
     def __init__(self):
-
+        threading.Thread.__init__(self);
         self.playSomething = PlaySomething()
         self.home = HomePage()
         self.home.perform_actions()
