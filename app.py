@@ -554,7 +554,7 @@ def upload_music():
     return render_template('./webui/templates/upload-music.html', disabled=dis)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
+    app.run(host='0.0.0.0', port=80, debug=False, threaded=True)
     curr = Book()
     GPIO.add_event_detect(BUTTON[1], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
     GPIO.add_event_detect(BUTTON[2], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
