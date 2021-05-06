@@ -406,6 +406,7 @@ app = Flask(__name__, static_folder='./webui/assets')
 curr = Book()
 
 UPLOAD_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/uploads"
+WEBUI_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/webui"
 ALLOWED_MUSIC_EXTENSIONS = ["MP3", "WAV"]
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER;
 
@@ -426,7 +427,7 @@ control_file.close();
 
 @app.route("/")
 def hello():
-    return render_template('./webui/templates/index.html');
+    return render_template(WEBUI_FOLDER + '/' + 'index.html');
 
 @app.route("/radio.html", methods=["GET", "POST"])
 def radio_1():
