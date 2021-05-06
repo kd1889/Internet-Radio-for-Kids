@@ -60,6 +60,7 @@ class MusicPlayer(threading.Thread):
         if not radio.is_music_playing():
             # if music was playing before but has now ended play next track; else it has been paused
             if self.isPlaying == True:
+                print("in process");
                 self.play_next_track(self.index)
 
         time.sleep(1)
