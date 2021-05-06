@@ -412,10 +412,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER;
 
 
 stations = [];
-radio_file = open("radio.yaml", 'r');
-music_file = open("music.yaml", 'r');
-playlist_file = open("playlist.yaml", 'r');
-control_file = open("control.yaml", 'r');
+radio_file = open("./webui/radio.yaml", 'r');
+music_file = open("./webui/music.yaml", 'r');
+playlist_file = open("./webui/playlist.yaml", 'r');
+control_file = open("./webui/control.yaml", 'r');
 playlists = yaml.safe_load(playlist_file);
 stations = yaml.safe_load(radio_file);
 musics = yaml.safe_load(music_file);
@@ -427,7 +427,7 @@ control_file.close();
 
 @app.route("/")
 def hello():
-    return render_template('index.html');
+    return render_template('./webui/templates/index.html');
 
 @app.route("/radio.html", methods=["GET", "POST"])
 def radio():
@@ -446,15 +446,15 @@ def radio():
         yaml.dump(stations,file);
         file.close();
         return redirect(request.url);
-    return render_template('radio.html', stations=stations['stations'], disabled=dis);
+    return render_template('./webui/templates/radio.html', stations=stations['stations'], disabled=dis);
 
 @app.route("/music.html")
 def music():
-    return render_template('music.html');
+    return render_template('./webui/templates/music.html');
 
 @app.route("/playlist-music.html")
 def playlist():
-    return render_template('playlist-music.html');
+    return render_template('./webui/templates/playlist-music.html');
 
 
 @app.route("/playlist-1.html", methods=["GET", "POST"])
@@ -471,7 +471,7 @@ def playlist1():
         yaml.dump(playlists, config_playlist_file);
         config_playlist_file.close();
         return redirect(request.url);
-    return render_template('playlist-1.html', all_music=musics['musics'], pl1 = playlists['playlists'][1]['songs']);
+    return render_template('./webui/templates/playlist-1.html', all_music=musics['musics'], pl1 = playlists['playlists'][1]['songs']);
 
 @app.route("/playlist-2.html", methods=["GET", "POST"])
 def playlist2():
@@ -488,7 +488,7 @@ def playlist2():
         print(playlists['playlists'][2]);
         return redirect(request.url);
 
-    return render_template('playlist-2.html', all_music=musics['musics'], pl2 = playlists['playlists'][2]['songs']);
+    return render_template('./webui/templates/playlist-2.html', all_music=musics['musics'], pl2 = playlists['playlists'][2]['songs']);
 
 def update_config(values):
     controls["textbox"]["start_time"] = values["start_time"]
@@ -524,7 +524,7 @@ def parental_control():
             yaml.dump(controls, config_control_file);
             config_control_file.close();
             return redirect(request.url)
-    return render_template('control.html', config=controls)
+    return render_template('./webui/templates/control.html', config=controls)
 
 def valid_extension(file_name):
 
@@ -560,7 +560,7 @@ def upload_music():
             config_music_file.close();
             return redirect(request.url)
 
-    return render_template('upload-music.html', disabled=dis)
+    return render_template('./webui/templates/upload-music.html', disabled=dis)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
