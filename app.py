@@ -36,11 +36,11 @@ class MusicPlayer(threading.Thread):
         self.index = 0 # for track number in trackList
         self.isPlaying = False # attribute is set to true when track is playing
         self.changeTrack = False # set to true when changing track
-        threading.Thread.__init__(self);
+        #threading.Thread.__init__(self);
        # threading to keep play running at all times in background
-        #thread = threading.Thread(target=self.play, args=())
-        #thread.daemon = True
-        #thread.start()
+        thread = threading.Thread(target=self.play, args=())
+        thread.daemon = True
+        thread.start()
     def load_trackList(self, PLAYLIST):
         self.trackList = PLAYLIST;
         self.index = 0;
@@ -167,7 +167,7 @@ class PlaySomething(Page):
 
         #music player to swap between tracks and radio stations
         self.musicPlayer = MusicPlayer()
-        self.musicPlayer.start();
+        #self.musicPlayer.start();
         self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
         self.play_radio_station();
         
