@@ -2,7 +2,7 @@ num_stations: '3'
 stations:
 - name: Kids Jam
   'no': '0'
-  state: false
+  state: true
   url: http://streamer2.legatocommunications.com/kidjam1
 - name: iHeartRadio Kids
   'no': '1'

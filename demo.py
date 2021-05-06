@@ -1,9 +1,13 @@
 import radio
 import time;
 from resources.utils import BUTTON
+import yaml
 
 radio.setup_pins()
-radio.setup_station("stations.txt")
+file = open("./webui/radio.yaml", 'r');
+radioDict = yaml.safe_load(file);
+radio.setup_station(radio.create_stations(radioDict)[0]); 
+
 print("Testing is_led_on");
 
 print(radio.is_led_on(0));

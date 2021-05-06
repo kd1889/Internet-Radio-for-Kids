@@ -4,6 +4,7 @@ import sys
 import RPi.GPIO as GPIO
 from resources.utils import BUTTON, LCD_COMMAND
 import time
+import yaml;
 import threading
 #import pygame as pg
 GPIO.setmode(GPIO.BCM)
@@ -14,12 +15,28 @@ radio.setup_pygame_player();
 #MUSIC_ENDED = pg.USEREVENT;
 #pg.mixer.music.set_endevent(MUSIC_ENDED);
 
+radio_file = open("./webui/radio.yaml", 'r');
+playlist_file = open("./webui/playlist.yaml", 'r');
+CONFIG_RADIO = yaml.safe_load(radio_file);
+CONFIG_PLAYLIST = yaml.safe_load(playlist_file);
+STATIONS = radio.create_stations(CONFIG_RADIO)[0];
+NUM_STATIONS = radio.create_stations(CONFIG_RADIO)[1];
+PLAYLIST_1 = radio.create_playlist(CONFIG_PLAYLIST, 1);
+PLAYLIST_2 = radio.create_playlist(CONFIG_PLAYLIST, 2);
+PLAYLISTS = [PLAYLIST_1, PLAYLIST_2];
+print(PLAYLISTS[0]);
+radio_file.close();
+playlist_file.close();
+
+
+radio.setup_station(STATIONS);
+
 class MusicPlayer(threading.Thread):
 
     def __init__(self):
         super().__init__()
         self.TIME_PLAYED = 0
-        self.trackList = ["HiTomSamp.mp3","bensound-epic.mp3", "bensound-onceagain.mp3"]
+        self.trackList = []
         self.index = 0 # for track number in trackList
         self.isPlaying = False # attribute is set to true when track is playing
         self.changeTrack = False # set to true when changing track
@@ -28,7 +45,9 @@ class MusicPlayer(threading.Thread):
         thread = threading.Thread(target=self.play, args=())
         thread.daemon = True
         thread.start()
-
+    def load_trackList(self, PLAYLIST):
+        self.trackList = PLAYLIST;
+        self.index = 0;
     def pause(self):
         radio.pause_music()
         self.isPlaying = False
@@ -86,6 +105,8 @@ class MusicPlayer(threading.Thread):
         radio.stop_player();
         radio.stop_radio();
         self.isPlaying = False
+    def toggle_player(self, state):
+        self.isPlaying = state;
 
     def play_next_track(self, trackNumber):
         #self.kill_music()
@@ -135,10 +156,11 @@ class PlaySomething(Page):
         self.isMusicOnly = True
         self.radio_number = 0 # radio number on screen - 1
         self.playlist_number = 0 # playlist number on screen - 1
-        self.number_of_playlists = 1
-        self.number_of_stations = 3
+        self.number_of_playlists = len(PLAYLISTS);
+        self.number_of_stations = NUM_STATIONS;
 
         self.musicPlayer = MusicPlayer()
+        self.musicPlayer.load_trackList(PLAYLISTS[self.playlist_number]);
         #radio.stop_player();
         #radio.play_radio(1);
        # self.play_track()
@@ -176,8 +198,8 @@ class PlaySomething(Page):
         radio.stop_player()
         self.isRadioPlaying = False
 
-    def play_radio(self):
-        radio.play_radio(self.radio_number)
+    def play_radio_station(self):
+        radio.play_radio(self.radio_number + 1)
         self.isRadioPlaying = True
 
     def perform_actions(self, actionNumber=0):
@@ -194,12 +216,15 @@ class PlaySomething(Page):
         if actionNumber == 1: #playing radio
             self.isMusicOnly = False
             self.stop_radio()
-            radio.play_radio(self.radio_number);
+            self.play_radio_station();
+            self.musicPlayer.toggle_player(False);
 
         if actionNumber == 2: # playing playlist
             self.isMusicOnly = True
-            self.stop_radio()
+            self.stop_radio();
+            self.musicPlayer.load_trackList(PLAYLISTS[self.playlist_number]);
             self.play_track();
+            self.musicPlayer.toggle_player(True);
             #self.play();
 
     def is_playing(self):
@@ -263,8 +288,8 @@ class Book:
         thread.start()
 
     def p_control(self):
-
-        while True:
+        STOP = False;
+        while STOP:
             if exit_event.is_set():
                 break # kill background task play at the end when ctrl + c hit
 
@@ -355,6 +380,7 @@ curr = Book()
 def signal_handler(sig, frame):
     radio.stop_player();
     radio.stop_radio();
+    radio.radio_reset();
     exit_event.set()
     GPIO.cleanup()
     sys.exit(0)
@@ -367,8 +393,8 @@ def button_pressed_callback(channel):
 GPIO.add_event_detect(BUTTON[1], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[2], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[3], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
-GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # mute or pause
-GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # back button
+#GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # mute or pause
+#GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # back button
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.pause()

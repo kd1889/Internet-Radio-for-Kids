@@ -3,9 +3,9 @@ drop_down:
   - - Enable_Session
     - false
   - - Enable_Always
-    - true
-  - - Disable
     - false
+  - - Disable
+    - true
   pc_status:
   - - Enable
     - true

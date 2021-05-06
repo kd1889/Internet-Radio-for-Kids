@@ -140,22 +140,24 @@ def stop_radio():
     Stop radio play, and reset playlist
     """
     os.system("mpc stop");
-def setup_station(station_list):
+def setup_station(filename):
     """
-    Given a list, read from it different radio stations and fill the
+    Given a filename, read from it different radio stations and fill the
     MPC playlist with the different stations
     """
-    for url in station_list:
-        if (url[1].strip()):
-            os.system("mpc add " + url[1]);
-def radio_reset():
-    os.system("mpc clear");
+    stations = open(filename, 'r');
+    
+    for line in stations:
+        if (line.strip()):
+            os.system("mpc add " + line);
+        
+    
+    stations.close();
 
 def play_sound(sound_file):
     """
     Obtained from adafruit I2S decoder setup
     """
-    sound_file = "./uploads/" + sound_file;
     clock = pg.time.Clock();
     try:
         pg.mixer.music.load(sound_file)
@@ -186,6 +188,8 @@ def setup_buttons():
 
     for b in BUTTON.values():
         GPIO.setup(b, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
 def setup_pins():
     """
     Setup all pins required for radio operation. This function
@@ -200,12 +204,10 @@ def create_playlist(PLAYLIST_DICT, PLAYLIST_NUM):
     else:
         return PLAYLIST_DICT['playlists'][PLAYLIST_NUM]['songs']
 
-def create_stations(RADIO_DICT):
-    stations = RADIO_DICT['stations'];
-    num_stations =int(RADIO_DICT['num_stations']);
-    res_stations = [];
-    for i in range(num_stations):
-        if stations[i]['state']:
-            res_stations.append((stations[i]['name'], stations[i]['url']));
-    return res_stations, len(res_stations);
-    
+def load_stations(RADIO_DICT):
+    station = []
+
+    for index in range(int(RADIO_DICT['num_station'])):
+        if RADIO_DICT['stations'][index]['state']:
+            station.append((RADIO_DICT['stations'][index]['name'], RADIO_DICT['stations'][index]['url']))
+
