@@ -19,17 +19,9 @@ radio_file = open("./webui/radio.yaml", 'r');
 playlist_file = open("./webui/playlist.yaml", 'r');
 CONFIG_RADIO = yaml.safe_load(radio_file);
 CONFIG_PLAYLIST = yaml.safe_load(playlist_file);
-STATIONS = radio.create_stations(CONFIG_RADIO)[0];
-NUM_STATIONS = radio.create_stations(CONFIG_RADIO)[1];
-PLAYLIST_1 = radio.create_playlist(CONFIG_PLAYLIST, 1);
-PLAYLIST_2 = radio.create_playlist(CONFIG_PLAYLIST, 2);
-PLAYLISTS = [PLAYLIST_1, PLAYLIST_2];
-print(PLAYLISTS[0]);
+#print(PLAYLISTS[0]);
 radio_file.close();
 playlist_file.close();
-
-
-radio.setup_station(STATIONS);
 
 class MusicPlayer(threading.Thread):
 
@@ -151,19 +143,29 @@ class PlaySomething(Page):
     def __init__(self):
 
         super().__init__(self.FEATURES)
+        #Inital setup of the configuration value
+        #Using flask-app + threads, update these values
+        self.STATIONS = radio.create_stations(CONFIG_RADIO)[0];
+        self.NUM_STATIONS = radio.create_stations(CONFIG_RADIO)[1];
+        self.PLAYLIST_1 = radio.create_playlist(CONFIG_PLAYLIST, 1);
+        self.PLAYLIST_2 = radio.create_playlist(CONFIG_PLAYLIST, 2);
+        self.PLAYLISTS = [self.PLAYLIST_1, self.PLAYLIST_2];
+        radio.setup_station(self.STATIONS);
+
+        #Attributes to control radio + music player
         self.isLocked = False # parental lock
         self.isRadioPlaying = False
         self.isMusicOnly = True
         self.radio_number = 0 # radio number on screen - 1
         self.playlist_number = 0 # playlist number on screen - 1
-        self.number_of_playlists = len(PLAYLISTS);
-        self.number_of_stations = NUM_STATIONS;
+        self.number_of_playlists = len(self.PLAYLISTS);
+        self.number_of_stations = self.NUM_STATIONS;
 
+        #music player to swap between tracks and radio stations
         self.musicPlayer = MusicPlayer()
-        self.musicPlayer.load_trackList(PLAYLISTS[self.playlist_number]);
-        #radio.stop_player();
-        #radio.play_radio(1);
-       # self.play_track()
+        self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
+        self.play_radio_station();
+        
 
     def get_time_played(self):
         return self.musicPlayer.TIME_PLAYED
@@ -222,7 +224,7 @@ class PlaySomething(Page):
         if actionNumber == 2: # playing playlist
             self.isMusicOnly = True
             self.stop_radio();
-            self.musicPlayer.load_trackList(PLAYLISTS[self.playlist_number]);
+            self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
             self.play_track();
             self.musicPlayer.toggle_player(True);
             #self.play();
