@@ -406,7 +406,7 @@ app = Flask(__name__, static_folder='./webui/assets')
 curr = Book()
 
 UPLOAD_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/uploads"
-WEBUI_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/webui"
+WEBUI_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/webui/templates"
 ALLOWED_MUSIC_EXTENSIONS = ["MP3", "WAV"]
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER;
 
