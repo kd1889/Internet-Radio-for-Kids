@@ -1,38 +1,4 @@
-Skip to content
-Search or jump to…
 
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@kd1889 
-kd1889
-/
-Internet-Radio-for-Kids
-1
-00
-Code
-Issues
-6
-Pull requests
-Actions
-Projects
-1
-Wiki
-Security
-Insights
-Settings
-Internet-Radio-for-Kids/button_lcd_demo.py /
-@kd1889
-kd1889 Moved globals to attributes of PlaySomething page to facilitate commu…
-…
-Latest commit 1a2d404 2 minutes ago
- History
- 2 contributors
-@sboahen@kd1889
-403 lines (323 sloc)  13.2 KB
-  
 import radio
 import signal
 import sys
@@ -435,15 +401,4 @@ GPIO.add_event_detect(BUTTON[3], GPIO.FALLING, callback=button_pressed_callback,
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.pause()
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
+
