@@ -564,8 +564,6 @@ def upload_music():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
-
-
-signal.signal(signal.SIGINT, signal_handler)
-signal.pause()
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.pause()
 
