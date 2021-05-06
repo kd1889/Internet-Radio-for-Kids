@@ -395,7 +395,7 @@ def button_pressed_callback(channel):
     return
 
 app = Flask(__name__, static_folder='./webui/assets')
-
+curr = Book()
 
 UPLOAD_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/uploads"
 ALLOWED_MUSIC_EXTENSIONS = ["MP3", "WAV"]
@@ -555,7 +555,7 @@ def upload_music():
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80, debug=False, threaded=True)
-    curr = Book()
+    curr.start();
     GPIO.add_event_detect(BUTTON[1], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
     GPIO.add_event_detect(BUTTON[2], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
     GPIO.add_event_detect(BUTTON[3], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
