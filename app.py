@@ -421,7 +421,7 @@ def hello():
     return render_template('./webui/templates/index.html');
 
 @app.route("/radio.html", methods=["GET", "POST"])
-def radio():
+def radio_1():
 #    fill_stations(file)
     print("Before POST");
     dis = controls["drop_down"]["add_music_radio"][2][1];
