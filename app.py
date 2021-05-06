@@ -401,12 +401,13 @@ GPIO.add_event_detect(BUTTON[2], GPIO.FALLING, callback=button_pressed_callback,
 GPIO.add_event_detect(BUTTON[3], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 #GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # mute or pause
 #GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # back button
-
-app = Flask(__name__, static_folder='./webui/assets')
+WEBUI_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/webui/"
+app = Flask(__name__, static_folder= WEBUI_FOLDER + '/assets', template_folder=WEBUI_FOLDER + 'templates/')
 curr = Book()
 
 UPLOAD_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/uploads"
-WEBUI_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/webui/templates"
+
+
 ALLOWED_MUSIC_EXTENSIONS = ["MP3", "WAV"]
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER;
 
@@ -427,7 +428,7 @@ control_file.close();
 
 @app.route("/")
 def hello():
-    return render_template(WEBUI_FOLDER + '/' + 'index.html');
+    return render_template('index.html');
 
 @app.route("/radio.html", methods=["GET", "POST"])
 def radio_1():
