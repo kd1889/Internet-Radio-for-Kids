@@ -167,6 +167,7 @@ class PlaySomething(Page):
 
         #music player to swap between tracks and radio stations
         self.musicPlayer = MusicPlayer()
+        self.musicPlayer.start();
         self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
         self.play_radio_station();
         
