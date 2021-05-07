@@ -172,7 +172,7 @@ class PlaySomething(Page):
         self.musicPlayer = MusicPlayer()
         #self.musicPlayer.start();
         self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
-        if (self.NUM_STATIONS != 0)
+        if (self.NUM_STATIONS != 0):
             self.play_radio_station();
         
 
@@ -198,7 +198,10 @@ class PlaySomething(Page):
                                                  self.radio_number,
                                                  self.number_of_stations
         )
-        self.FEATURES[0] = "Radio " + str(self.radio_number + 1)
+        if (self.NUM_STATIONS == 0):
+            self.FEATURES[0] = "No Station";
+        else:
+            self.FEATURES[0] = "Radio " + str(self.radio_number + 1)
         self.FEATURES[1] = "Playlist " + str(self.playlist_number + 1)
 
     def is_radio_playing(self):
@@ -233,8 +236,9 @@ class PlaySomething(Page):
         self.radio_number = 0;
         
     def play_radio_station(self):
-        radio.play_radio(self.radio_number + 1)
-        self.isRadioPlaying = True
+        if self.NUM_STATIONS:
+            radio.play_radio(self.radio_number + 1)
+            self.isRadioPlaying = True
 
     def perform_actions(self, actionNumber=0):
         if actionNumber == 3:
