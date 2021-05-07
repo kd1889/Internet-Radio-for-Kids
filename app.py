@@ -238,7 +238,7 @@ class PlaySomething(Page):
         else:
             self.FEATURES[0] = "Radio 1"
         print(self.STATIONS, self.NUM_STATIONS);
-        radio.reset_radio();
+        radio.radio_reset();
         radio.setup_station(self.STATIONS);
         self.radio_number = 0;
         
