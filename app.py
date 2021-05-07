@@ -204,6 +204,7 @@ class PlaySomething(Page):
     def stop_radio(self):
         radio.stop_radio()
         self.isRadioPlaying = False
+        
     def stop_player(self):
         radio.stop_player();
         self.isMusicPlaying = False;
@@ -245,7 +246,7 @@ class PlaySomething(Page):
 
         if actionNumber == 1: #playing radio
             self.isMusicOnly = False
-            self.stop_radio()
+            self.stop_player()
             self.play_radio_station();
             self.musicPlayer.toggle_player(False);
 
