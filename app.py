@@ -235,6 +235,8 @@ class PlaySomething(Page):
         self.NUM_STATIONS = radio.create_stations(new_radio)[1];
         if self.NUM_STATIONS == 0:
             self.FEATURES[0] = "No station"
+        else:
+            self.FEATURES[0] = "Radio 1"
         print(self.STATIONS, self.NUM_STATIONS);
         self.stop_radio();
         radio.setup_station(self.STATIONS);
