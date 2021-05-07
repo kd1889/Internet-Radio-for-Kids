@@ -228,6 +228,8 @@ class PlaySomething(Page):
             print(self.PLAYLISTS);
             if i == playlist_num - 1:
                 self.PLAYLISTS[i] = new_trackList;
+                if i == self.playlist_number:
+                    self.musicPlayer.load_trackList(new_trackList);
         self.stop_player();   
         self.play_track();
         
