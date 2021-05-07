@@ -232,6 +232,7 @@ class PlaySomething(Page):
     def update_radio(self, new_radio):
         self.STATIONS = radio.create_stations(new_radio)[0];
         self.NUM_STATIONS = radio.create_stations(new_radio)[1];
+        print(self.STATIONS, self.NUM_STATIONS);
         if (self.isRadioPlaying):
             self.stop_radio();
         radio.setup_station(self.STATIONS);
@@ -482,7 +483,9 @@ def radio_1():
                 stations['stations'][num]['state'] = False;
         
         update_config_file(stations, "./webui/radio.yaml");
+        
         curr.playSomething.update_radio(stations);
+        
         return redirect(request.url);
     return render_template('radio.html', stations=stations['stations'], disabled=dis);
 
