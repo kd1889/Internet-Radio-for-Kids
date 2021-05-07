@@ -221,6 +221,7 @@ class PlaySomething(Page):
         self.isMusicPlaying = False;
         
     def update_playlist(self, new_playlist, playlist_num):
+        changed = -1;
         if (playlist_num > 2):
             return;
         new_trackList = radio.create_playlist(new_playlist, playlist_num);
