@@ -228,7 +228,8 @@ class PlaySomething(Page):
             print(self.PLAYLISTS);
             if i == playlist_num - 1:
                 self.PLAYLISTS[i] = new_trackList;
-        #self.stop_player();   
+        self.stop_player();   
+        self.play_track();
         
     def update_radio(self, new_radio):
         self.STATIONS = radio.create_stations(new_radio)[0];
