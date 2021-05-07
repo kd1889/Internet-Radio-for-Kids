@@ -482,9 +482,9 @@ def playlist1():
             playlists['playlists'][1]['songs'] = songs_to_add;
         playlists['playlists'][1]['num_songs'] = str(len(songs_to_add));
         print(playlists['playlists'][1]);
-        config_playlist_file = open("playlist.yaml", 'w');
-        yaml.dump(playlists, config_playlist_file);
-        config_playlist_file.close();
+        
+        update_config_file(playlists, "./webui/playlist.yaml");
+       
         return redirect(request.url);
     return render_template('playlist-1.html', all_music=musics['musics'], pl1 = playlists['playlists'][1]['songs']);
 
@@ -497,9 +497,9 @@ def playlist2():
         else:
             playlists['playlists'][2]['songs'] = songs_to_add;
         playlists['playlists'][2]['num_songs'] = str(len(songs_to_add));
-        config_playlist_file = open("playlist.yaml", 'w');
-        yaml.dump(playlists, config_playlist_file);
-        config_playlist_file.close();
+        
+        update_config_file(playlists, "./webui/playlist.yaml");
+     
         print(playlists['playlists'][2]);
         return redirect(request.url);
 
@@ -535,9 +535,9 @@ def parental_control():
             print("end_time:", request.form.get("end_time"))
             print("add_music_radio:", request.form.get("add_music_radio"))
             update_config(request.form)
-            config_control_file = open("control.yaml", 'w');
-            yaml.dump(controls, config_control_file);
-            config_control_file.close();
+            
+            update_config_file(stations, "./webui/control.yaml");
+      
             return redirect(request.url)
     return render_template('control.html', config=controls)
 
@@ -566,13 +566,14 @@ def upload_music():
                 if files['filename'] == music.filename:
                     return redirect(request.url);
             music.save(os.path.join(app.config['UPLOAD_FOLDER'], music.filename))
-            config_music_file = open("music.yaml", 'w');
+            
             print("music saved")
             musics['musics'].append({"name":music_name, "filename":music.filename});
             musics['num_music'] = str(int(musics['num_music']) + 1);
             print(musics);
-            yaml.dump(musics, config_music_file);
-            config_music_file.close();
+            
+            update_config_file(musics, "./webui/music.yaml");
+            
             return redirect(request.url)
 
     return render_template('upload-music.html', disabled=dis)
