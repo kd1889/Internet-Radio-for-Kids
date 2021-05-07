@@ -147,8 +147,8 @@ class Page:
 class PlaySomething(Page):
     FEATURES = ["Radio 1", "Playlist 1", "More"]
 
-    def __init__(self):
 
+    def __init__(self):
         super().__init__(self.FEATURES)
         #Inital setup of the configuration value
         #Using flask-app + threads, update these values
@@ -174,6 +174,8 @@ class PlaySomething(Page):
         self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
         if (self.NUM_STATIONS != 0):
             self.play_radio_station();
+        else:
+            FEATURES[0] = "No station"
         
 
     def get_time_played(self):
