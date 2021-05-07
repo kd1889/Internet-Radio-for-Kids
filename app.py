@@ -41,9 +41,11 @@ class MusicPlayer(threading.Thread):
         thread = threading.Thread(target=self.play, args=())
         thread.daemon = True
         thread.start()
+        
     def load_trackList(self, PLAYLIST):
         self.trackList = PLAYLIST;
         self.index = 0;
+        
     def pause(self):
         radio.pause_music()
         self.isPlaying = False
@@ -217,19 +219,16 @@ class PlaySomething(Page):
         radio.stop_player();
         self.isMusicPlaying = False;
         
-    def update_playlist(self, new_playlist):
-        self.PLAYLIST_1 = radio.create_playlist(new_playlist,1);
-        self.PLAYLIST_2 = radio.create_playlist(new_playlist,2);
-        self.PLAYLISTS = [self.PLAYLIST_1, self.PLAYLIST_2];
-        self.radio_number = 0;
-        if (self.isRadioPlaying):
-            #self.stop_player();
-            self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
-        else:
-            self.stop_player();
-            self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
-            self.play_track();
-            
+    def update_playlist(self, new_playlist, playlist_num)
+        if (playlist_num > 2):
+            return;
+        new_trackList = radio.create_playlist(new_playlist, playlist_num);
+        for i in range(len(self.PLAYLISTS)):
+            print(self.PLAYLISTS);
+            if i == playlist_num - 1:
+                self.PLAYLISTS[i] = new_trackList;
+        self.stop_player();   
+        
     def update_radio(self, new_radio):
         self.STATIONS = radio.create_stations(new_radio)[0];
         self.NUM_STATIONS = radio.create_stations(new_radio)[1];
@@ -515,7 +514,10 @@ def playlist1():
         print(playlists['playlists'][1]);
         
         update_config_file(playlists, "./webui/playlist.yaml");
-       
+        
+        curr.playSomething.update_playlist(playlists, 1);
+        
+        print(playlists['playlists'][2]);
         return redirect(request.url);
     return render_template('playlist-1.html', all_music=musics['musics'], pl1 = playlists['playlists'][1]['songs']);
 
@@ -530,7 +532,9 @@ def playlist2():
         playlists['playlists'][2]['num_songs'] = str(len(songs_to_add));
         
         update_config_file(playlists, "./webui/playlist.yaml");
-     
+        
+        curr.playSomething.update_playlist(playlists, 2);
+        
         print(playlists['playlists'][2]);
         return redirect(request.url);
 
