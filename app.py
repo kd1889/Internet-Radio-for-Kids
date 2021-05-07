@@ -83,6 +83,8 @@ class MusicPlayer(threading.Thread):
 #                break
 #            print("Playing track: " + self.trackList[trackNumber])
 #            time.sleep(1)
+        if (len(self.trackList) == 0):
+            return;
         self.TIME_PLAYED += radio.play_sound(self.trackList[trackNumber]);
         self.index = (self.index+1)%len(self.trackList) ;
         self.isPlaying = True;
@@ -170,7 +172,8 @@ class PlaySomething(Page):
         self.musicPlayer = MusicPlayer()
         #self.musicPlayer.start();
         self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
-        self.play_radio_station();
+        if (self.NUM_STATIONS != 0)
+            self.play_radio_station();
         
 
     def get_time_played(self):
