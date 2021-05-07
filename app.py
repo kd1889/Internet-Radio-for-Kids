@@ -445,6 +445,7 @@ def radio_1():
                 stations['stations'][num]['state'] = False;
         file = open("radio.yaml", 'w');
         yaml.dump(stations,file);
+        print(stations);
         file.close();
         return redirect(request.url);
     return render_template('radio.html', stations=stations['stations'], disabled=dis);
