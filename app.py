@@ -233,8 +233,9 @@ class PlaySomething(Page):
                 if i == self.playlist_number:
                     self.musicPlayer.load_trackList(new_trackList);
                     changed = i;
-          
+                    print(changed);
         if (not self.isRadioPlaying and changed == self.playlist_number):
+            print(changed);
             self.stop_player(); 
             self.play_track();
         
