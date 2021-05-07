@@ -223,7 +223,7 @@ class PlaySomething(Page):
         self.PLAYLISTS = [self.PLAYLIST_1, self.PLAYLIST_2];
         self.radio_number = 0;
         if (self.isRadioPlaying):
-            self.stop_player();
+            #self.stop_player();
             self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
         else:
             self.stop_player();
