@@ -231,7 +231,7 @@ class PlaySomething(Page):
                 if i == self.playlist_number:
                     self.musicPlayer.load_trackList(new_trackList);
         self.stop_player();   
-        if (!self.isRadioPlaying):
+        if (not self.isRadioPlaying):
             self.play_track();
         
     def update_radio(self, new_radio):
