@@ -203,22 +203,30 @@ class PlaySomething(Page):
 
     def stop_radio(self):
         radio.stop_radio()
-        radio.stop_player()
         self.isRadioPlaying = False
-
+    def stop_player(self):
+        radio.stop_player();
+        self.isMusicPlaying = False;
+        
     def update_playlist(self, new_playlist):
         self.PLAYLIST_1 = radio.create_playlist(new_playlist,1);
         self.PLAYLIST_2 = radio.create_playlist(new_playlist,2);
         self.PLAYLISTS = [self.PLAYLIST_1, self.PLAYLIST_2];
+        self.radio_number = 0;
         if (self.isRadioPlaying):
             self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
         else:
-            self.stop_radio();
+            self.stop_player();
+            self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
             self.play_track();
+            
     def update_radio(self, new_radio):
         self.STATIONS = radio.create_stations(new_radio)[0];
         self.NUM_STATIONS = radio.create_stations(new_radio)[1];
+        if (self.isRadioPlaying):
+            self.stop_radio();
         radio.setup_station(self.STATIONS);
+        self.radio_number = 0;
         
     def play_radio_station(self):
         radio.play_radio(self.radio_number + 1)
