@@ -227,7 +227,7 @@ class PlaySomething(Page):
         if new_trackList is None:
             new_trackList = [];
         for i in range(len(self.PLAYLISTS)):
-            print(self.PLAYLISTS);
+            
             if i == playlist_num - 1:
                 self.PLAYLISTS[i] = new_trackList;
                 if i == self.playlist_number:
