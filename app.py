@@ -224,6 +224,8 @@ class PlaySomething(Page):
         if (playlist_num > 2):
             return;
         new_trackList = radio.create_playlist(new_playlist, playlist_num);
+        if new_trackList is None:
+            new_trackList = [];
         for i in range(len(self.PLAYLISTS)):
             print(self.PLAYLISTS);
             if i == playlist_num - 1:
