@@ -482,6 +482,7 @@ def radio_1():
                 stations['stations'][num]['state'] = False;
         
         update_config_file(stations, "./webui/radio.yaml");
+        curr.playSomething.updateRadio(stations);
         return redirect(request.url);
     return render_template('radio.html', stations=stations['stations'], disabled=dis);
 
