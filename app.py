@@ -215,7 +215,11 @@ class PlaySomething(Page):
         else:
             self.stop_radio();
             self.play_track();
-            
+    def update_radio(self, new_radio):
+        self.STATIONS = radio.create_stations(new_radio)[0];
+        self.NUM_STATIONS = radio.create_stations(new_radio)[1];
+        radio.setup_station(self.STATIONS);
+        
     def play_radio_station(self):
         radio.play_radio(self.radio_number + 1)
         self.isRadioPlaying = True
