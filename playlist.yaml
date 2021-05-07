@@ -1,0 +1,15 @@
+num_playlist: '2'
+playlists:
+  1:
+    id: '1'
+    num_songs: '3'
+    songs:
+    - bensound-epic.mp3
+    - bensound-onceagain.mp3
+    - bensound-sunny.mp3
+  2:
+    id: '2'
+    num_songs: '2'
+    songs:
+    - HiTomSamp.mp3
+    - bensound-tenderness.mp3

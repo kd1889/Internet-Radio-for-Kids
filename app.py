@@ -1,4 +1,5 @@
-
+##Currently able to change playlists and radio stations using the python flask app
+##Waiting on controls functions working to implement code for control.yaml and corresponding flask
 import radio
 import signal
 import sys
