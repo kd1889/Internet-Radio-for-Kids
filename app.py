@@ -233,6 +233,8 @@ class PlaySomething(Page):
     def update_radio(self, new_radio):
         self.STATIONS = radio.create_stations(new_radio)[0];
         self.NUM_STATIONS = radio.create_stations(new_radio)[1];
+        if self.NUM_STATIONS == 0:
+            self.FEATURES[0] = "No station"
         print(self.STATIONS, self.NUM_STATIONS);
         self.stop_radio();
         radio.setup_station(self.STATIONS);
