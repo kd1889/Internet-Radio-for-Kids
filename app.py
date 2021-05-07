@@ -443,8 +443,8 @@ def button_pressed_callback(channel):
 GPIO.add_event_detect(BUTTON[1], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[2], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[3], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
-#GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # mute or pause
-#GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # back button
+GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # mute or pause
+GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # back button
 WEBUI_FOLDER = "/home/pi/curr_project/Internet-Radio-for-Kids/webui/"
 app = Flask(__name__, static_folder= WEBUI_FOLDER + '/assets', template_folder=WEBUI_FOLDER + 'templates/')
 curr = Book()
