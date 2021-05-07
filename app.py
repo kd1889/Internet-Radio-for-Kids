@@ -536,7 +536,7 @@ def parental_control():
             print("add_music_radio:", request.form.get("add_music_radio"))
             update_config(request.form)
             
-            update_config_file(stations, "./webui/control.yaml");
+            update_config_file(controls, "./webui/control.yaml");
       
             return redirect(request.url)
     return render_template('control.html', config=controls)
