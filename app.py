@@ -175,7 +175,7 @@ class PlaySomething(Page):
         if (self.NUM_STATIONS != 0):
             self.play_radio_station();
         else:
-            FEATURES[0] = "No station"
+            self.FEATURES[0] = "No station"
         
 
     def get_time_played(self):
