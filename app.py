@@ -219,7 +219,7 @@ class PlaySomething(Page):
         radio.stop_player();
         self.isMusicPlaying = False;
         
-    def update_playlist(self, new_playlist, playlist_num)
+    def update_playlist(self, new_playlist, playlist_num):
         if (playlist_num > 2):
             return;
         new_trackList = radio.create_playlist(new_playlist, playlist_num);
