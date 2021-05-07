@@ -206,6 +206,16 @@ class PlaySomething(Page):
         radio.stop_player()
         self.isRadioPlaying = False
 
+    def update_playlist(self, new_playlist):
+        self.PLAYLIST_1 = radio.create_playlist(new_playlist,1);
+        self.PLAYLIST_2 = radio.create_playlist(new_playlist,2);
+        self.PLAYLISTS = [self.PLAYLIST_1, self.PLAYLIST_2];
+        if (self.isRadioPlaying):
+            self.musicPlayer.load_trackList(self.PLAYLISTS[self.playlist_number]);
+        else:
+            self.stop_radio();
+            self.play_track();
+            
     def play_radio_station(self):
         radio.play_radio(self.radio_number + 1)
         self.isRadioPlaying = True
@@ -426,6 +436,11 @@ music_file.close();
 playlist_file.close();
 control_file.close();
 
+def update_config_file(updated_config, filename):
+    open_file = open(filename, 'w');
+    yaml.dump(updated_config, open_file);
+    open_file.close();
+    
 @app.route("/")
 def hello():
     return render_template('index.html');
@@ -443,10 +458,8 @@ def radio_1():
                 stations['stations'][num]['state'] = True;
             else:
                 stations['stations'][num]['state'] = False;
-        file = open("radio.yaml", 'w');
-        yaml.dump(stations,file);
-        print(stations);
-        file.close();
+        
+        update_config_file(stations, "./webui/radio.yaml");
         return redirect(request.url);
     return render_template('radio.html', stations=stations['stations'], disabled=dis);
 
