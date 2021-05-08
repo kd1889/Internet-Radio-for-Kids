@@ -6,6 +6,7 @@ from resources.utils import BUTTON, LCD_COMMAND
 import time
 import yaml;
 import threading
+from datetime import datetime
 #import pygame as pg
 GPIO.setmode(GPIO.BCM)
 LCD_CMD = GPIO.LOW
@@ -155,7 +156,7 @@ class PlaySomething(Page):
         #Attributes to control radio + music player
         self.isLocked = False # parental lock
         self.isRadioPlaying = False
-        self.isMusicOnly = True
+        self.isMusicOnly = False # since radio is playing when device is turned on
         self.radio_number = 0 # radio number on screen - 1
         self.playlist_number = 0 # playlist number on screen - 1
         self.number_of_playlists = len(self.PLAYLISTS);
@@ -282,20 +283,43 @@ class Book:
 
         self.currPageName = "hp"
         self.currPage = self.home
-        self.MAX_TIME = 0.5
+        self.MAX_TIME = 10
+
+        self.radio_time_played = 0
+
+        # times are in 24 hr format
+        self.START_TIME = 0 # 12 AM
+        self.END_TIME = 20 # 8 PM
+
+        self.p_status = False # while True, parental settings is on
 
         # threading to keep checking whether daily max has been reached
         thread = threading.Thread(target=self.p_control, args=())
         thread.daemon = True
         thread.start()
 
+    def is_valid_playtime(self):
+
+        timeNow = datetime.now()
+        hr = timeNow.strftime("%H")
+
+        return self.START_TIME <= int(hr) < self.END_TIME
+
+    def get_total_time_played(self):
+        return self.radio_time_played + self.playSomething.get_time_played()
+
+
     def p_control(self):
-        STOP = False;
-        while STOP:
+
+        while self.p_status:
+
+            if self.playSomething.is_radio_playing():
+               self.radio_time_played += 1
+
             if exit_event.is_set():
                 break # kill background task play at the end when ctrl + c hit
 
-            if self.playSomething.get_time_played() > self.MAX_TIME:
+            if not self.is_valid_playtime() or self.get_total_time_played() > self.MAX_TIME:
 
                 if not self.playSomething.is_locked():
                     if self.playSomething.is_playing():
@@ -304,6 +328,7 @@ class Book:
 
                     self.playSomething.stop_radio()
                     self.playSomething.lock()
+                    print("Lock has stopped radio")
             else:
                 if self.playSomething.is_locked():
                     self.playSomething.unlock()
@@ -357,7 +382,7 @@ class Book:
                         if not self.playSomething.isMusicOnly: # if currently radio and not playing music
 
                             if not self.playSomething.is_radio_playing():
-                                self.playSomething.play_radio()
+                                self.playSomething.play_radio_station()
                                 print("radio unmuted")
                         else:
 
@@ -395,8 +420,8 @@ def button_pressed_callback(channel):
 GPIO.add_event_detect(BUTTON[1], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[2], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
 GPIO.add_event_detect(BUTTON[3], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200)
-#GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # mute or pause
-#GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # back button
+GPIO.add_event_detect(BUTTON[4], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # mute or pause
+GPIO.add_event_detect(BUTTON[5], GPIO.FALLING, callback=button_pressed_callback, bouncetime=200) # back button
 
 signal.signal(signal.SIGINT, signal_handler)
 signal.pause()
