@@ -177,10 +177,10 @@ def is_music_playing():
     return pg.mixer.music.get_busy()
 
 def pause_music():
-    pg.mixer.pause()
+    pg.mixer.music.pause()
 
 def unpause_music():
-    pg.mixer.unpause()
+    pg.mixer.music.unpause()
 
 def setup_buttons():
 
